@@ -42,17 +42,21 @@
         }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        #camera-preview {
+       #camera-preview {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 260px;      /* TĂNG Ở ĐÂY */
-    height: 200px;     /* TĂNG Ở ĐÂY */
-    border: 2px solid rgba(255,0,0,0.8);
+    top: 20px;
+    right: 20px;
+
+    width: 230px;      /* VỪA VỪA */
+    height: 150px;
+
+    border: 3px solid red;
+    border-radius: 14px;
+
     transform: scaleX(-1);
-    opacity: 0.85;
-    border-radius: 12px;
-    z-index: 200;
+    opacity: 0.95;
+    z-index: 300;
+    background: black;
 }
         
         #error-log { display: none; position: absolute; top: 0; left: 0; color: red; background: rgba(0,0,0,0.8); z-index: 999; padding: 10px; }
@@ -315,7 +319,7 @@
                 }
             } else {
                 group.scale.set(1,1,1);
-                group.rotation.y += (handRotY - group.rotation.y) * 0.05;
+                group.rotation.y += (handRotY - group.rotation.y) * 0.02;
             }
         }
 
@@ -323,7 +327,7 @@
             requestAnimationFrame(animate);
             const time = Date.now() * 0.001;
             const speed = 0.06;
-            const handRotY = (handX - 0.5) * 2.5;
+            const handRotY = handX * Math.PI * 2;
 
             // Vandiep
             updateParticleGroup(groupGold, state, speed, handRotY, time, false);
@@ -398,8 +402,8 @@
             const video = document.getElementsByClassName('input_video')[0];
             const canvas = document.getElementById('camera-preview');
             const ctx = canvas.getContext('2d');
-            canvas.width = 260;
-            canvas.height = 200;
+            canvas.width = 230;
+            canvas.height = 150;
             const statusDiv = document.getElementById('status');
             
             let frameCnt = 0;
@@ -407,7 +411,8 @@
             hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
 
             hands.onResults(results => {
-                ctx.clearRect(0,0,100,75); ctx.drawImage(results.image, 0, 0, 100, 75);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
 
                 if(results.multiHandLandmarks.length > 0) {
                     const lm = results.multiHandLandmarks[0];
